@@ -36,6 +36,8 @@ async function onSearch(event) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.',
       );
+      loadMoreBtn.disable();
+      loadMoreBtn.hide();
     }
     if (data.totalHits > 0) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
