@@ -1,9 +1,6 @@
-// import './sass/main.scss';
 import './css/style.css';
 import Notiflix from 'notiflix';
-// import debounce from 'lodash.debounce';
 import NewsApiService from './js/components/new-api-service';
-// import { divide } from 'lodash';
 import cardsTpl from './templates/cards.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -13,34 +10,61 @@ const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: true,
 });
+
 const newsApiService = new NewsApiService();
 
 const form = document.querySelector('.search-form');
-form.addEventListener('submit', onSubmitForm);
+form.addEventListener('submit', onSearch);
 
-const button_load = document.querySelector('.load-more');
-loadMoreBtn.refs.button.addEventListener('click', onClickLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
 
 const divCardContainer = document.querySelector('.gallery');
 
-function onSubmitForm(event) {
+async function onSearch(event) {
   event.preventDefault();
+  clearCardsContainer();
   newsApiService.query = event.currentTarget.elements.searchQuery.value;
   if (!newsApiService.query.trim()) {
     return Notiflix.Notify.warning('Oops, enter your request');
   }
+  loadMoreBtn.show();
+  loadMoreBtn.disable();
   newsApiService.resetPage();
-  newsApiService.fetchCards().then(cards => {
-    clearCardsContainer();
-    appendCardsMarkup(cards.hits);
-  });
+  try {
+    const data = await newsApiService.fetchCards();
+    if (data.totalHits === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+    }
+    if (data.totalHits > 0) {
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+      appendCardsMarkup(data.hits);
+      loadMoreBtn.enable();
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
-function onClickLoadMore() {
-  console.log('Load more');
-  newsApiService.fetchCards().then(appendCardsMarkup);
+
+async function onLoadMore() {
+  try {
+    const data = await newsApiService.fetchCards();
+    appendCardsMarkup(data.hits);
+    loadMoreBtn.enable();
+    console.log('data.hits.length', data.hits.length);
+    if (data.hits.length < 40) {
+      Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+
+      loadMoreBtn.disable();
+      loadMoreBtn.hide();
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
+
 function appendCardsMarkup(cards) {
-  console.log('append');
   divCardContainer.insertAdjacentHTML('beforeend', cardsTpl(cards));
   lightBoxes();
 }

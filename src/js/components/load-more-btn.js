@@ -3,16 +3,19 @@ export default class LoadMoreBtn {
     this.refs = this.getRefs(selector);
     hidden && this.hide();
   }
-  gerRefs(selector) {
+  getRefs(selector) {
     const refs = {};
     refs.button = document.querySelector(selector);
     return refs;
   }
   enable() {
+    this.refs.button.disabled = false;
+  }
+  disable() {
     this.refs.button.disabled = true;
   }
   show() {
-    this.refs.button.classList.removed('is-hidden');
+    this.refs.button.classList.remove('is-hidden');
   }
   hide() {
     this.refs.button.classList.add('is-hidden');
