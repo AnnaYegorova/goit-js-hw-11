@@ -33,8 +33,6 @@ const scrollUp = document.querySelector('.button-scroll-up');
 scrollUp.addEventListener('click', onScrollUp);
 
 function onScrollUp() {
-  // console.log(divCardContainer.getBoundingClientRect());
-
   // const { height: cardHeight } = divCardContainer.getBoundingClientRect();
   const { height: cardHeight } = divCardContainer.firstElementChild.getBoundingClientRect();
 
@@ -45,8 +43,6 @@ function onScrollUp() {
 }
 
 function onScrollDown() {
-  // console.log('heigth', divCardContainer.getBoundingClientRect().height);
-
   // const { height: cardHeight } = divCardContainer.getBoundingClientRect();
   const { height: cardHeight } = divCardContainer.firstElementChild.getBoundingClientRect();
   window.scrollBy({
@@ -64,10 +60,6 @@ async function onSearch(event) {
     return Notiflix.Notify.warning('Oops, enter your request');
   }
 
-  loadMoreBtn.show();
-  downBtn.show();
-  upBtn.show();
-
   newsApiService.resetPage();
   try {
     const data = await newsApiService.fetchCards();
@@ -76,7 +68,7 @@ async function onSearch(event) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.',
       );
-      // loadMoreBtn.disable();
+
       loadMoreBtn.hide();
     }
     if (data.totalHits > 0) {
@@ -88,6 +80,10 @@ async function onSearch(event) {
       loadMoreBtn.hide();
       downBtn.hide();
       upBtn.hide();
+    } else {
+      loadMoreBtn.show();
+      downBtn.show();
+      upBtn.show();
     }
   } catch (error) {
     console.log(error);
