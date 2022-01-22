@@ -33,7 +33,8 @@ const scrollUp = document.querySelector('.button-scroll-up');
 scrollUp.addEventListener('click', onScrollUp);
 
 function onScrollUp() {
-  console.log(divCardContainer.getBoundingClientRect());
+  // console.log(divCardContainer.getBoundingClientRect());
+
   // const { height: cardHeight } = divCardContainer.getBoundingClientRect();
   const { height: cardHeight } = divCardContainer.firstElementChild.getBoundingClientRect();
 
@@ -44,7 +45,8 @@ function onScrollUp() {
 }
 
 function onScrollDown() {
-  console.log('heigth', divCardContainer.getBoundingClientRect().height);
+  // console.log('heigth', divCardContainer.getBoundingClientRect().height);
+
   // const { height: cardHeight } = divCardContainer.getBoundingClientRect();
   const { height: cardHeight } = divCardContainer.firstElementChild.getBoundingClientRect();
   window.scrollBy({
