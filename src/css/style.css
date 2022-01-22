@@ -80,3 +80,25 @@ body {
   font-size: 10px;
   padding: 7px;
 }
+.button-scroll-down {
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  opacity: 0.6;
+  border-color: #6161eb;
+  background: center / contain no-repeat url('../img/arrow-down-black.png');
+}
+.button-scroll-up {
+  position: fixed;
+  bottom: 70px;
+  right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  opacity: 0.6;
+  border-color: #6161eb;
+  background: center / contain no-repeat url('../img/arrow-up-black.png');
+}
