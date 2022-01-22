@@ -65,8 +65,6 @@ async function onSearch(event) {
   }
 
   loadMoreBtn.show();
-  loadMoreBtn.disable();
-
   downBtn.show();
   upBtn.show();
 
@@ -78,13 +76,18 @@ async function onSearch(event) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.',
       );
-      loadMoreBtn.disable();
+      // loadMoreBtn.disable();
       loadMoreBtn.hide();
     }
     if (data.totalHits > 0) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       appendCardsMarkup(data.hits);
       loadMoreBtn.enable();
+    }
+    if (data.totalHits < 40) {
+      loadMoreBtn.hide();
+      downBtn.hide();
+      upBtn.hide();
     }
   } catch (error) {
     console.log(error);
@@ -103,6 +106,8 @@ async function onLoadMore() {
 
       loadMoreBtn.disable();
       loadMoreBtn.hide();
+
+      downBtn.hide();
     }
   } catch (error) {
     console.log(error);
