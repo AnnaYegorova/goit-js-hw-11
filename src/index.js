@@ -59,28 +59,23 @@ async function onSearch(event) {
   if (!newsApiService.query.trim()) {
     return Notiflix.Notify.warning('Oops, enter your request');
   }
-
   newsApiService.resetPage();
   try {
     const data = await newsApiService.fetchCards();
+    loadMoreBtn.hide();
+    downBtn.hide();
+    upBtn.hide();
 
     if (data.totalHits === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.',
       );
-
-      loadMoreBtn.hide();
     }
     if (data.totalHits > 0) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       appendCardsMarkup(data.hits);
-      loadMoreBtn.enable();
     }
-    if (data.totalHits < 40) {
-      loadMoreBtn.hide();
-      downBtn.hide();
-      upBtn.hide();
-    } else {
+    if (data.totalHits >= 40) {
       loadMoreBtn.show();
       downBtn.show();
       upBtn.show();
