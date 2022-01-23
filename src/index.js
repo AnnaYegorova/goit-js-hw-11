@@ -55,6 +55,10 @@ async function onSearch(event) {
   event.preventDefault();
   clearCardsContainer();
 
+  loadMoreBtn.hide();
+  downBtn.hide();
+  upBtn.hide();
+
   newsApiService.query = event.currentTarget.elements.searchQuery.value;
   if (!newsApiService.query.trim()) {
     return Notiflix.Notify.warning('Oops, enter your request');
@@ -62,9 +66,6 @@ async function onSearch(event) {
   newsApiService.resetPage();
   try {
     const data = await newsApiService.fetchCards();
-    loadMoreBtn.hide();
-    downBtn.hide();
-    upBtn.hide();
 
     if (data.totalHits === 0) {
       Notiflix.Notify.failure(
@@ -74,8 +75,10 @@ async function onSearch(event) {
     if (data.totalHits > 0) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       appendCardsMarkup(data.hits);
+      upBtn.hide();
     }
     if (data.totalHits >= 40) {
+      console.log('loadMoreBtn.show()');
       loadMoreBtn.show();
       downBtn.show();
       upBtn.show();
@@ -89,15 +92,12 @@ async function onLoadMore() {
   try {
     const data = await newsApiService.fetchCards();
     appendCardsMarkup(data.hits);
-    loadMoreBtn.enable();
 
     console.log('data.hits.length', data.hits.length);
     if (data.hits.length < 40) {
       Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
 
-      loadMoreBtn.disable();
       loadMoreBtn.hide();
-
       downBtn.hide();
     }
   } catch (error) {
